@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/FunctionButton.qml</file>
+        <file>qml/main.qml</file>
+        <file>js/Utils.js</file>
+        <file>res/translations/la_cn.qm</file>
+    </qresource>
+</RCC>
