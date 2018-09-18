@@ -641,7 +641,7 @@ void Ft2232HWorker::writeTCGGain()
     DWORD       bytesWritten = 0;
     USHORT tcgBuf[512]; // fow now, just simply use the local variable
     for(int i=0;i<512;i++){
-        tcgBuf[i] = 54 + i*4;
+        tcgBuf[i] = 54 + i*7;
     }
     ftStatus = FT_Write(m_ftHandle, tcgBuf, 1024, &bytesWritten);
     if (ftStatus != FT_OK)
@@ -659,14 +659,13 @@ exit:   //something is wrong, need to report
 #include <QDebug>
 void Ft2232HWorker::testFun(int num)
 {
-//    m_wrData.ALARM_CTRL_REG = (UCHAR)num;
-//    m_needWrite = true;
-//    writeFifo();
+    m_wrData.KEY_LED_REG = (1 << 2) | (m_wrData.KEY_LED_REG & 0x03);
+    writeFifo();
 
     QString program = "/usr/bin/gpio_test";
     QStringList arg1,arg2;
-    arg1 << "-s output -iGPIOB29 -v 1";
-    arg1 << "-s output -iGPIOB29 -v 0";
+    arg1 << "-s"<<"output"<<"-iGPIOB29"<<"-v"<<"1";
+    arg2 << "-s"<<"output"<<"-iGPIOB29"<<"-v"<<"0";
     QProcess myProcess;
     myProcess.start(program, arg1, QIODevice::ReadWrite);
     myProcess.waitForFinished();
@@ -765,13 +764,13 @@ void Ft2232HWorker::wrtransducerType(int val)
 void Ft2232HWorker::wrtcgGain(int val)
 {
     // to be finished
-//    m_wrData.RX_MUX_REG = ((UCHAR)val << 4) | (m_wrData.RX_MUX_REG & 0x0f) ;
-//    writeFifo();
+    m_wrData.RX_MUX_REG = ((UCHAR)val << 4) | (m_wrData.RX_MUX_REG & 0x0f) ;
+    writeFifo();
     // change gpio GPIOB[31:30] to 01
     //    gpio_test  -s output -iGPIOB30 -v 1
     QString program = "/usr/bin/gpio_test";
     QStringList arg1,arg2;
-    arg1 << "-s output -iGPIOB30 -v 1";
+    arg1 << "-s"<<"output"<<"-iGPIOB30"<<"-v"<<"1";
     QProcess myProcess;
     myProcess.start(program, arg1, QIODevice::ReadWrite);
 
@@ -782,7 +781,7 @@ void Ft2232HWorker::wrtcgGain(int val)
     }
 
     // change gpio GPIOB[31:30] back to 00
-    arg1 << "-s output -iGPIOB30 -v 0";
+    arg2 << "-s"<<"output"<<"-iGPIOB30"<<"-v"<<"0";
     myProcess.start(program, arg2, QIODevice::ReadWrite);
     if(myProcess.waitForFinished(1000)){
         qDebug()<<__func__<<"gpio_test  -s output -iGPIOB30 -v 0";
@@ -800,6 +799,15 @@ void Ft2232HWorker::wrvga(int val)
 {
     m_wrData.VGA_PWR_EN = (UCHAR)val;
     writeFifo();
+}
+
+void Ft2232HWorker::wrrepeatFreq(int val)
+{
+    // to be finished
+    m_wrData.RepeatFre = 100000000/val - 1;
+    writeFifo();
+    qDebug()<<__func__<<val;
+
 }
 
 

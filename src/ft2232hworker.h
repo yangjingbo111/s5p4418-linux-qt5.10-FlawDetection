@@ -30,6 +30,8 @@ public slots:
     void wrtcgGain(int val);
     void wrkeyBoardBacklight(int val);
     void wrvga(int val);
+
+    void wrrepeatFreq(int val);
 private:
     FT_HANDLE       m_ftHandle;
     int         portNumber = 0;

@@ -28,6 +28,8 @@ public:
     Q_INVOKABLE void wrkeyBoardBacklight(int val);
     Q_INVOKABLE void wrvga(int val);
 
+    Q_INVOKABLE void wrrepeatFreq(int val);
+
 signals:
     void initWorker();
     void callWorker(int num);
@@ -44,6 +46,8 @@ signals:
     void wrtcgGainSig(int val);
     void wrkeyBoardBacklightSig(int val);
     void wrvgaSig(int val);
+
+    void wrrepeatFreqSig(int val);
 
 public slots:
        void catchData(QByteArray data);

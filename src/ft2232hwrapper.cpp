@@ -29,6 +29,8 @@ Ft2232HWrapper::Ft2232HWrapper(QObject *parent)
         connect(this, SIGNAL(wrkeyBoardBacklightSig(int)), m_worker, SLOT(wrkeyBoardBacklight(int)), Qt::QueuedConnection);
         connect(this, SIGNAL(wrvgaSig(int)), m_worker, SLOT(wrvga(int)), Qt::QueuedConnection);
 
+        connect(this, SIGNAL(wrrepeatFreqSig(int)), m_worker, SLOT(wrrepeatFreq(int)), Qt::QueuedConnection);
+
 
         m_worker->moveToThread(m_thread);
         m_thread->start();
@@ -112,6 +114,11 @@ void Ft2232HWrapper::wrkeyBoardBacklight(int val)
 void Ft2232HWrapper::wrvga(int val)
 {
     emit wrvgaSig(val);
+}
+
+void Ft2232HWrapper::wrrepeatFreq(int val)
+{
+    emit wrrepeatFreqSig(val);
 }
 
 void Ft2232HWrapper::catchData(QByteArray data)

@@ -29,6 +29,8 @@ Window {
     property int tcgGainValue: 0
     property int keyBoardBacklightValue: 0
     property int vgaValue: 0
+    //menu 3
+    property int repeatFreqValue: 30
 
 
     AppManager{
@@ -94,12 +96,12 @@ Window {
                     if(event.key === Utils.KEY_UP){   //KEY UP, SELECT THE UPSIDE ITEM
                         // control the hasFocus owner
                         if(app.focusItemIndex > 0) app.focusItemIndex -= 1
-                        else if(app.focusItemIndex === 0)app.focusItemIndex = 9
+                        else if(app.focusItemIndex === 0)app.focusItemIndex = 10
 
                     }
                     else if(event.key === Utils.KEY_DOWN){   //KEY DOWN, SELECT THE DOWNSIDE ITEM
-                        if(app.focusItemIndex < 9 /* 9 is now the MAX item num*/) app.focusItemIndex += 1
-                        else if(app.focusItemIndex === 9)app.focusItemIndex = 0
+                        if(app.focusItemIndex < 10 /* 10 is now the MAX item num*/) app.focusItemIndex += 1
+                        else if(app.focusItemIndex === 10)app.focusItemIndex = 0
                     }
                     else if(event.key === Utils.KEY_RIGHT){   //KEY RIGHT +
                         if(gain.hasFocus){
@@ -158,6 +160,12 @@ Window {
                             if(app.vgaValue < 1)app.vgaValue += 1
 
                             ft2232HWrapper.wrvga(app.vgaValue)
+                        }
+                        //menu 3
+                        else if(repeatFreq.hasFocus){
+                            if(app.repeatFreqValue < 1000)app.repeatFreqValue += 10
+
+                            ft2232HWrapper.wrrepeatFreq(app.repeatFreqValue)
                         }
                     }
                     else if(event.key === Utils.KEY_LEFT){  //KEY LEFT -
@@ -219,6 +227,12 @@ Window {
                             if(app.vgaValue > 0)app.vgaValue -= 1
 
                             ft2232HWrapper.wrvga(app.vgaValue)
+                        }
+                        //menu 3
+                        else if(repeatFreq.hasFocus){
+                            if(app.repeatFreqValue > 30)app.repeatFreqValue -= 10
+
+                            ft2232HWrapper.wrrepeatFreq(app.repeatFreqValue)
                         }
                     }
                     else if(event.key === Utils.KEY_BACK){   // now use this ESC button to exit application
@@ -307,7 +321,7 @@ Window {
                     width: 128
                     spacing: 0
                     height: parent.height
-                    visible: app.focusItemIndex > 4
+                    visible: app.focusItemIndex > 4 && app.focusItemIndex < 10
 
                     FunctionButton {
                         id: rectificationType
@@ -387,6 +401,27 @@ Window {
                         }
 
                     }
+                } //Column end
+
+                Column{
+                    id: menu_3
+                    width: 128
+                    spacing: 0
+                    height: parent.height
+                    visible: app.focusItemIndex >= 10
+
+                    FunctionButton {
+                        id: repeatFreq
+                        title: qsTr("menu_repeatFreq")
+                        value: app.repeatFreqValue
+                        index: 10
+                        hasFocus: {
+                            if(app.focusItemIndex === index) return true
+                            else return false
+                        }
+
+                    }
+
                 } //Column end
 
             }

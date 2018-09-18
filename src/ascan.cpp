@@ -44,7 +44,6 @@ void Ascan::paint(QPainter *painter)
         x = 0;
         y += 10;
     }
-    //painter->save();
 
     // paint A scan
     painter->setPen(QPen(QColor(Qt::green)));
